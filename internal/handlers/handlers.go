@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"github.com/nfabacus/bookings/internal/config"
+	"github.com/nfabacus/bookings/internal/forms"
 	"github.com/nfabacus/bookings/internal/models"
 	"github.com/nfabacus/bookings/internal/render"
 	"log"
@@ -33,7 +34,9 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	remoteIP := r.RemoteAddr
 	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 
-	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+	})
 }
 
 // About is the about page handler
