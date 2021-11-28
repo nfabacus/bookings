@@ -2,12 +2,66 @@
 
 {{define "content"}}
     <div class="container">
-        <div class="row">
+        <div class="row mb-2">
             <div class="col text-center">
                 <h1>Home</h1>
+                {{.CSRFToken}}
                 <p>This is Home page.</p>
-                <img src="/static/images/house.jpg" width="80%">
+                <img src="/static/images/house.jpg" width="50%">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form id="contact-form" action="/form" method="post" class="needs-validation" novalidate>
+                    <div class="form-group mb-2">
+                        <label for="first_name">First Name:</label>
+                        <input class="form-control"
+                               id="first_name"
+                               autocomplete="off"
+                               type='text'
+                               name='first_name'
+                               value=""
+                               required
+                        >
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="last_name">Last Name:</label>
+                        <input
+                                class="form-control"
+                                id="last_name"
+                                autocomplete="off"
+                                type='text'
+                                name='last_name'
+                                value=""
+                                required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <button id="submitButton" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 {{end}}
+
+<script>
+    document.getElementById('submitButton').addEventListener('click', (e) => {
+       e.preventDefault();
+       console.log('clicked!');
+       const form = document.getElementById('contact-form');
+       const formData = new FormData(form);
+       formData.append('csrf_token', "{{.CSRFToken}}");
+       fetch('/form', {
+           method: 'post',
+           body: formData
+       })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            console.log(data.ok);
+            console.log(data.message);
+        })
+    });
+</script>

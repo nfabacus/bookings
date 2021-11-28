@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/alexedwards/scs/v2"
-	"github.com/nfabacus/bookings/pkg/config"
-	"github.com/nfabacus/bookings/pkg/handlers"
-	"github.com/nfabacus/bookings/pkg/render"
+	"github.com/nfabacus/bookings/internal/config"
+	"github.com/nfabacus/bookings/internal/handlers"
+	"github.com/nfabacus/bookings/internal/render"
 	"log"
 	"net/http"
 	"time"

@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/nfabacus/bookings/pkg/config"
-	"github.com/nfabacus/bookings/pkg/handlers"
+	"github.com/nfabacus/bookings/internal/config"
+	"github.com/nfabacus/bookings/internal/handlers"
 	"net/http"
 )
 
@@ -19,6 +19,8 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
+	mux.Get("/example-json", handlers.Repo.GetExampleJSON)
+	mux.Post("/form", handlers.Repo.PostForm)
 
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
