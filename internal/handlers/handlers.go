@@ -31,12 +31,14 @@ func NewHandlers(r *Repository) {
 
 // Home is the home page handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	//remoteIP := r.RemoteAddr
-	//m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
+	var emptyEnquiry models.Enquiry
+	data := make(map[string]interface{})
+	data["enquiry"] = emptyEnquiry
 
 	// make forms available in template below
 	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{
 		Form: forms.New(nil),
+		Data: data,
 	})
 }
 
