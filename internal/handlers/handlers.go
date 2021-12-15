@@ -42,6 +42,50 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Post form handler
+func (m *Repository) PostForm(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	enquiry := models.Enquiry{
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Email:     r.Form.Get("email"),
+		Phone:     r.Form.Get("phone"),
+	}
+
+	form := forms.New(r.PostForm)
+
+	//form.Has("first_name", r)
+	form.Required("first_name", "last_name", "email")
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["enquiry"] = enquiry
+
+		render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
+
+	//resp := jsonResponse{
+	//	OK:      true,
+	//	Message: "Available!",
+	//}
+	//
+	//out, err := json.MarshalIndent(resp, "", "     ")
+	//if err != nil {
+	//	log.Println(err)
+	//}
+	//w.Header().Set("Content-Type", "application/json")
+	//w.Write(out)
+}
+
 // About is the about page handler
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	// perform some logic
@@ -76,47 +120,4 @@ func (m *Repository) GetExampleJSON(w http.ResponseWriter, r *http.Request) {
 	log.Println(string(out))
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
-}
-
-// Post form handler
-func (m *Repository) PostForm(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	enquiry := models.Enquiry{
-		FirstName: r.Form.Get("first_name"),
-		LastName:  r.Form.Get("last_name"),
-		Email:     r.Form.Get("email"),
-		Phone:     r.Form.Get("phone"),
-	}
-
-	form := forms.New(r.PostForm)
-
-	form.Has("first_name", r)
-
-	if !form.Valid() {
-		data := make(map[string]interface{})
-		data["enquiry"] = enquiry
-
-		render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{
-			Form: form,
-			Data: data,
-		})
-		return
-	}
-
-	//resp := jsonResponse{
-	//	OK:      true,
-	//	Message: "Available!",
-	//}
-	//
-	//out, err := json.MarshalIndent(resp, "", "     ")
-	//if err != nil {
-	//	log.Println(err)
-	//}
-	//w.Header().Set("Content-Type", "application/json")
-	//w.Write(out)
 }

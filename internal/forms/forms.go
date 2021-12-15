@@ -3,6 +3,7 @@ package forms
 import (
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 // Form creates a custom form struct, embeds a url.values object
@@ -21,6 +22,15 @@ func New(data url.Values) *Form {
 	return &Form{
 		data,
 		errors(map[string][]string{}),
+	}
+}
+
+func (f *Form) Required(fields ...string) { // pass fields type of string my number of the param
+	for _, field := range fields {
+		value := f.Get(field)
+		if strings.TrimSpace(value) == "" {
+			f.Errors.Add(field, "This field cannot be blank.")
+		}
 	}
 }
 
