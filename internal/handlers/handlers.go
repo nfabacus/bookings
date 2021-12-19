@@ -95,8 +95,13 @@ func (m *Repository) SubmissionSummary(w http.ResponseWriter, r *http.Request) {
 	enquiry, ok := m.App.Session.Get(r.Context(), "enquiry").(models.Enquiry)
 	if !ok {
 		log.Println("cannot get item from session")
+		m.App.Session.Put(r.Context(), "error", "can't get enquiry from session")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
+
+	m.App.Session.Remove(r.Context(), "enquiry")
+
 	data := make(map[string]interface{})
 	data["enquiry"] = enquiry
 
