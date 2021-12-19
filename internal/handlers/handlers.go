@@ -74,6 +74,10 @@ func (m *Repository) PostForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	m.App.Session.Put(r.Context(), "enquiry", enquiry)
+
+	http.Redirect(w, r, "/submission-summary", http.StatusSeeOther)
+
 	//resp := jsonResponse{
 	//	OK:      true,
 	//	Message: "Available!",
@@ -85,6 +89,20 @@ func (m *Repository) PostForm(w http.ResponseWriter, r *http.Request) {
 	//}
 	//w.Header().Set("Content-Type", "application/json")
 	//w.Write(out)
+}
+
+func (m *Repository) SubmissionSummary(w http.ResponseWriter, r *http.Request) {
+	enquiry, ok := m.App.Session.Get(r.Context(), "enquiry").(models.Enquiry)
+	if !ok {
+		log.Println("cannot get item from session")
+		return
+	}
+	data := make(map[string]interface{})
+	data["enquiry"] = enquiry
+
+	render.RenderTemplate(w, r, "submissionSummary.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // About is the about page handler

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"github.com/alexedwards/scs/v2"
 	"github.com/nfabacus/bookings/internal/config"
 	"github.com/nfabacus/bookings/internal/handlers"
+	"github.com/nfabacus/bookings/internal/models"
 	"github.com/nfabacus/bookings/internal/render"
 	"log"
 	"net/http"
@@ -17,7 +19,8 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
-
+	// what I am going to put in the session
+	gob.Register(models.Enquiry{})
 	// change this to true when in production
 	app.InProduction = false
 

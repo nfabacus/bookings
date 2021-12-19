@@ -19,6 +19,7 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Post("/", handlers.Repo.PostForm)
+	mux.Get("/submission-summary", handlers.Repo.SubmissionSummary)
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/example-json", handlers.Repo.GetExampleJSON)
 
